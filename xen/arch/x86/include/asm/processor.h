@@ -96,7 +96,27 @@
  * Host IA32_CR_PAT value to cover all memory types.  This is not the default
  * MSR_PAT value, and is an ABI with PV guests.
  */
-#define XEN_MSR_PAT _AC(0x050100070406, ULL)
+#define XEN_MSR_PAT _AC(0x0407050600070106, ULL)
+
+#define XEN_MSR_PAT_UC  0x00
+#define XEN_MSR_PAT_WC  0x01
+#define XEN_MSR_PAT_RESERVED_1  0x02
+#define XEN_MSR_PAT_RESERVED_2  0x03
+#define XEN_MSR_PAT_WT  0x04
+#define XEN_MSR_PAT_WP  0x05
+#define XEN_MSR_PAT_WB  0x06
+#define XEN_MSR_PAT_UCM 0x07
+#if XEN_MSR_PAT != (XEN_MSR_PAT_WB  << 0x00 | \
+                    XEN_MSR_PAT_WC  << 0x08 | \
+                    XEN_MSR_PAT_UCM << 0x10 | \
+                    XEN_MSR_PAT_UC  << 0x18 | \
+                    XEN_MSR_PAT_WB  << 0x20 | \
+                    XEN_MSR_PAT_WP  << 0x28 | \
+                    XEN_MSR_PAT_UCM << 0x30 | \
+                    XEN_MSR_PAT_WT  << 0x38 | \
+                    0) || 0
+#error incorrect XEN_MSR_PAT
+#endif
 
 #ifndef __ASSEMBLY__
 
