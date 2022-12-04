@@ -961,13 +961,10 @@ get_page_from_l1e(
 
         switch ( l1f & PAGE_CACHE_ATTRS )
         {
-        case 0: /* WB */
-            flip |= _PAGE_PWT | _PAGE_PCD;
-            break;
-        case _PAGE_PWT: /* WT */
-        case _PAGE_PWT | _PAGE_PAT: /* WP */
-            flip |= _PAGE_PCD | (l1f & _PAGE_PAT);
-            break;
+        case _PAGE_WB: /* WB */
+        case _PAGE_WT: /* WT */
+        case _PAGE_WP: /* WP */
+            flip |= ( l1f & PAGE_CACHE_ATTRS ) ^ _PAGE_UC;
         }
 
         return flip;

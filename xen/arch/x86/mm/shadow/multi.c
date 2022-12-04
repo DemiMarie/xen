@@ -535,7 +535,7 @@ _sh_propagate(struct vcpu *v,
     if ( guest_nx_enabled(v) )
         pass_thru_flags |= _PAGE_NX_BIT;
     if ( level == 1 && !shadow_mode_refcounts(d) && mmio_mfn )
-        pass_thru_flags |= _PAGE_PAT | _PAGE_PCD | _PAGE_PWT;
+        pass_thru_flags |= PAGE_CACHE_ATTRS;
     sflags = gflags & pass_thru_flags;
 
     /*
@@ -548,7 +548,7 @@ _sh_propagate(struct vcpu *v,
     {
         int type;
 
-        ASSERT(!(sflags & (_PAGE_PAT | _PAGE_PCD | _PAGE_PWT)));
+        ASSERT(!(sflags & PAGE_CACHE_ATTRS));
 
         /* compute the PAT index for shadow page entry when VT-d is enabled
          * and device assigned.
@@ -629,8 +629,8 @@ _sh_propagate(struct vcpu *v,
     else if ( p2mt == p2m_mmio_direct &&
               rangeset_contains_singleton(mmio_ro_ranges, mfn_x(target_mfn)) )
     {
-        sflags &= ~(_PAGE_RW | _PAGE_PAT);
-        sflags |= _PAGE_PCD | _PAGE_PWT;
+        sflags &= ~(_PAGE_RW | PAGE_CACHE_ATTRS);
+        sflags |= _PAGE_UC;
     }
 
     // protect guest page tables

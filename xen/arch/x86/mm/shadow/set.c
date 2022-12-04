@@ -356,7 +356,7 @@ int shadow_set_l1e(struct domain *d, shadow_l1e_t *sl1e,
         /* About to install a new reference */
         if ( shadow_mode_refcounts(d) )
         {
-#define PAGE_FLIPPABLE (_PAGE_RW | _PAGE_PWT | _PAGE_PCD | _PAGE_PAT)
+#define PAGE_FLIPPABLE (_PAGE_RW | PAGE_CACHE_ATTRS)
             int rc;
 
             TRACE_SHADOW_PATH_FLAG(TRCE_SFLAG_SHADOW_L1_GET_REF);
